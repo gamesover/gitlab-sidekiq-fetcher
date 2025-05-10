@@ -28,7 +28,7 @@ jobs:
           echo "vendor/gems/sidekiq-reliable-fetch/*" >> .git/info/sparse-checkout
           git pull origin master --depth 1 # Added --depth 1 for efficiency
             
-          mv vendor/gems/sidekiq-reliable-fetch/* ./
+          mv vendor/gems/sidekiq-reliable-fetch/. ./ # Changed to copy all files, including hidden ones
           
           # Remove now-empty folders and .git folder (optional)
           rm -rf vendor .git
