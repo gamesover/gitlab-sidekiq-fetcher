@@ -1,0 +1,59 @@
+name: Update Sidekiq Reliable Fetcher
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fetch-gem:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repo
+        uses: actions/checkout@v3
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Sparse checkout sidekiq-reliable-fetch from GitLab
+        run: |
+          mkdir tmp && cd tmp
+          git init
+          git remote add origin https://gitlab.com/gitlab-org/gitlab.git
+          git config core.sparseCheckout true
+          echo "vendor/gems/sidekiq-reliable-fetch/*" >> .git/info/sparse-checkout
+          git pull origin master --depth 1 # Added --depth 1 for efficiency
+
+          # Check if the source directory exists and has content before moving
+          if [ -d "vendor/gems/sidekiq-reliable-fetch" ] && [ -n "$(ls -A vendor/gems/sidekiq-reliable-fetch)" ]; then
+            mv vendor/gems/sidekiq-reliable-fetch/* ./
+          else
+            echo "Warning: Source directory vendor/gems/sidekiq-reliable-fetch not found or empty after git pull."
+            # If this is critical, you might want to exit here: exit 1
+          fi
+          
+          # Remove now-empty folders and .git folder (optional)
+          rm -rf vendor .git
+
+          # Move all content from current directory (gitlab-sidekiq-fetcher) to parent (project root)
+          # Enable dotglob to include hidden files
+          shopt -s dotglob
+          mv ./* ../
+          shopt -u dotglob
+          
+          # Return to project root
+          cd ..
+          # Remove the temporary directory, now empty
+          rm -rf tmp
+
+      - name: Commit changes
+        run: |
+          # Add all changes in the project root
+          git add .
+          # Check if there are staged changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update project root with sidekiq-reliable-fetch from GitLab"
+            git push
+          fi
