@@ -27,7 +27,7 @@ jobs:
           git config core.sparseCheckout true
           echo "vendor/gems/sidekiq-reliable-fetch/*" >> .git/info/sparse-checkout
           git pull origin master --depth 1 # Added --depth 1 for efficiency
-          ls -al vendor/gems/sidekiq-reliable-fetch  
+
           cp -a vendor/gems/sidekiq-reliable-fetch/. ./ # Changed to cp -a to avoid EBUSY, copies all files
           
           # Remove now-empty folders and .git folder (optional)
