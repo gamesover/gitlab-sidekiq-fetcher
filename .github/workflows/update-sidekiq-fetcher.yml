@@ -33,10 +33,10 @@ jobs:
           # Remove now-empty folders and .git folder (optional)
           rm -rf vendor .git
 
-          # Move all content from current directory (gitlab-sidekiq-fetcher) to parent (project root)
+          # Copy all content from current directory (tmp) to parent (project root)
           # Enable dotglob to include hidden files
           shopt -s dotglob
-          mv ./* ../
+          cp -a ./* ../
           shopt -u dotglob
           
           # Return to project root
