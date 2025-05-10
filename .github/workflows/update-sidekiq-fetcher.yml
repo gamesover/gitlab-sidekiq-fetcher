@@ -6,9 +6,11 @@ on:
 jobs:
   fetch-gem:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Add this line to grant write permissions
     steps:
       - name: Checkout your repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Git
         run: |
