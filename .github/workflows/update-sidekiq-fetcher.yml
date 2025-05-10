@@ -23,14 +23,8 @@ jobs:
           git config core.sparseCheckout true
           echo "vendor/gems/sidekiq-reliable-fetch/*" >> .git/info/sparse-checkout
           git pull origin master --depth 1 # Added --depth 1 for efficiency
-
-          # Check if the source directory exists and has content before moving
-          if [ -d "vendor/gems/sidekiq-reliable-fetch" ] && [ -n "$(ls -A vendor/gems/sidekiq-reliable-fetch)" ]; then
-            mv vendor/gems/sidekiq-reliable-fetch/* ./
-          else
-            echo "Warning: Source directory vendor/gems/sidekiq-reliable-fetch not found or empty after git pull."
-            # If this is critical, you might want to exit here: exit 1
-          fi
+            
+          mv vendor/gems/sidekiq-reliable-fetch/* ./
           
           # Remove now-empty folders and .git folder (optional)
           rm -rf vendor .git
