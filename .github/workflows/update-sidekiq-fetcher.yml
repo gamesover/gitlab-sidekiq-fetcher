@@ -2,8 +2,8 @@ name: Update Sidekiq Reliable Fetcher
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 15 * * *' # Runs at 3 PM UTC daily (1 AM AEST)
+  # schedule:
+  #   - cron: '0 15 * * *' # Runs at 3 PM UTC daily (1 AM AEST)
 
 jobs:
   fetch-gem:
